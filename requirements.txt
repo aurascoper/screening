@@ -1,0 +1,4 @@
+tradingview-ta
+pandas
+requests
+lxml
