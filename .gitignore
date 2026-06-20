@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Generated MEXC scan artifacts (regenerated every run).
+# NOTE: state/ is intentionally TRACKED — it's the cross-run transition memory.
+tv_scan_mexc_usdc_*.csv
+triggers_mexc_usdc_*.csv
+transitions_mexc_usdc_*.csv
