@@ -91,12 +91,39 @@ def current_from_csv(path: str) -> Dict[str, dict]:
 
 
 def current_from_live(tf: str, sleep: float) -> Dict[str, dict]:
+    import offline_mode as _om  # lazy import — no cost when live mode succeeds
+
     iv = INTERVAL_MAP[tf]
-    out = {}
-    uni = usdc_universe()
+    out: Dict[str, dict] = {}
+
+    try:
+        uni = usdc_universe()
+    except OSError as _exc:
+        print(f"[offline] MEXC unreachable ({_exc.__class__.__name__}) — GitHub-committed data", flush=True)
+        return _om.current_from_github(tf)
+
     print(f"live scan: {len(uni)} contracts on {tf}", flush=True)
+
+    _tv_dead = False
+    _offline_cache: Optional[Dict[str, dict]] = None
     for i, u in enumerate(uni, 1):
-        r = tv_rating(u["base"], iv, sleep)
+        if not _tv_dead:
+            r = tv_rating(u["base"], iv, sleep)
+            if r["rating"] is None:
+                print("[offline] TradingView unreachable — loading GitHub-committed ratings", flush=True)
+                _tv_dead = True
+                _offline_cache = _om.current_from_github(tf)
+
+        if _tv_dead:
+            cached = (_offline_cache or {}).get(u["mexc_symbol"], {})
+            r = {
+                "rating":     cached.get("rating"),
+                "tv_source":  "github-cache",
+                "tv_buy":     None,
+                "tv_sell":    None,
+                "tv_neutral": None,
+            }
+
         out[u["mexc_symbol"]] = {
             "rating": r["rating"], "base": u["base"],
             "contractSize": u["contractSize"], "maxLeverage": u["maxLeverage"], "last": u["last"],
