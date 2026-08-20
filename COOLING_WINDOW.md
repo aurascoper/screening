@@ -1,8 +1,20 @@
-# 4h scan is UNLOADED — cooling window active (2026-08-20 ~06:25Z)
+# TWO jobs UNLOADED — cooling window active (2026-08-20)
 
-`com.aurascoper.mexc-4h-transitions` was unloaded deliberately. It is not broken.
+`com.aurascoper.mexc-4h-transitions` (06:25Z) and `com.aurascoper.strongbuys-retry` (20:0xZ,
+operator-approved) were both unloaded deliberately. Neither is broken. Both plist files are
+intact; only the launchd registration was removed.
+
+**`strongbuys-retry` FIRES LIVE ORDERS** — `strong_buys_cron.py --live`, margin $24.75,
+leverage up to 50x, weekdays 08:35 local. It fired 4 picks on 2026-08-18. While it is
+unloaded, no autonomous strong-buy entries occur. That is a real change to trading behaviour
+and must not be left un-restored by accident.
 
 ## Why
+
+**Both** jobs scan TradingView, so the window was never actually quiet. `strong_buys_cron.py`
+shells out to `screen_mexc_usdc.py --intervals 4h` with **no `--sleep`**, so it uses the 0.12s
+default — the documented poison — and it re-entered the window at 13:35Z on 2026-08-20, six
+hours in. A test at 19:38Z, thirteen hours into the "window", was still fully throttled.
 
 TradingView is rate-limiting. Coverage decayed 45/78 -> 17/78 -> 10/78 -> 0/78 across
 successive runs because the limiter penalises *attempt count* with a lengthening penalty, and
@@ -26,7 +38,14 @@ waiting does." The fix for "we keep getting 0" is to scan **less**.
    ```
    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.aurascoper.mexc-4h-transitions.plist
    ```
-4. Delete this file.
+4. **Decide deliberately about `strongbuys-retry`** — it is a LIVE 50x order path, so
+   reloading it is a trading decision, not cleanup:
+   ```
+   launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.aurascoper.strongbuys-retry.plist
+   ```
+   Before reloading, fix the cause: give its `screen_mexc_usdc.py` call an explicit
+   `--sleep 3.0` (`strong_buys_cron.py:65`), or it re-poisons the limiter every weekday.
+5. Delete this file.
 
 ## What is safe while it stays unloaded
 
