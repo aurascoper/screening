@@ -24,9 +24,16 @@ ladder rungs on the first five symbols, so the penalty had not decayed at all.
 The plist's own note says it: "slowing down after tripping the limiter does not help; only
 waiting does." The fix for "we keep getting 0" is to scan **less**.
 
+## The window only actually STARTED at 2026-08-20T20:07Z
+
+Everything before that was not a cooling window — `strongbuys-retry` was still scanning
+unspaced every weekday, and it fired at 13:35Z. The 19:38Z test failing after "thirteen hours"
+is therefore not evidence about how long the penalty lasts; it is evidence the window was
+contaminated. **Count from 20:07Z, the first moment nothing was hitting the endpoint.**
+
 ## Resume procedure — do these in order
 
-1. Wait. Hours, not minutes. Nothing else recovers the quota.
+1. Wait. Hours, not minutes, measured from 20:07Z. Nothing else recovers the quota.
 2. Run **one** scan by hand and read the coverage line:
    ```
    cd ~/Developer/screening && ./venv/bin/python screen_transitions.py --tf 4h --sleep 3.0
