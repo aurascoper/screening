@@ -1,0 +1,49 @@
+name: Fetch MEXC USDC Ratings
+
+on:
+  schedule:
+    - cron: '5 */4 * * *'   # every 4 hours, offset by 5 min ahead of the screener
+  workflow_dispatch:
+
+jobs:
+  fetch-ratings:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch MEXC USDC ratings
+        # --sleep 3.0 IS LOAD-BEARING. Without it screen_mexc_usdc.py uses its 0.12s
+        # default, and TradingView rate-limits on attempt COUNT with a lengthening
+        # penalty: under throttling tv_rating walks all six venue rungs per symbol, so a
+        # 78-symbol scan issues ~468 requests instead of 78. Every run since this workflow
+        # was added has resolved only ~42% of the universe for exactly this reason, and a
+        # 42% file fails its own downstream coverage gate. 78 x 3.0s is ~4 minutes.
+        run: python screen_mexc_usdc.py --intervals 4h 1d --sleep 3.0
+
+      - name: Copy CSVs to tracked data/ directory
+        run: |
+          mkdir -p data
+          [ -f tv_scan_mexc_usdc_4h_all.csv ] && cp tv_scan_mexc_usdc_4h_all.csv data/mexc_usdc_4h_all.csv || true
+          [ -f tv_scan_mexc_usdc_1d_all.csv ] && cp tv_scan_mexc_usdc_1d_all.csv data/mexc_usdc_1d_all.csv || true
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/mexc_usdc_4h_all.csv data/mexc_usdc_1d_all.csv 2>/dev/null || true
+          git diff --cached --quiet && echo "No changes to commit" || \
+            git commit -m "data: refresh MEXC USDC ratings $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push origin HEAD:main

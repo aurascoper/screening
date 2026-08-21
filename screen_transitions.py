@@ -92,12 +92,58 @@ def current_from_csv(path: str) -> Dict[str, dict]:
 
 
 def current_from_live(tf: str, sleep: float, quote: str = "USDC") -> Dict[str, dict]:
+    """Live TradingView ratings, falling back to GitHub-committed data when unreachable.
+
+    MERGE 2026-08-21 — combines two independent changes that both belong here:
+      * the `quote` parameter, so the scan can cover a quote other than USDC
+      * the offline fallback, for cloud runs that cannot reach MEXC or TradingView
+
+    The RateLimited branch is new. The ladder circuit breaker in tv_rating raises it once K
+    symbols in a row exhaust every venue rung, which is the unambiguous signature of a
+    throttle rather than a missing listing. Switching to the cached ratings at that point is
+    both faster and more honest than grinding out ~468 futile requests and publishing nulls.
+    """
+    import offline_mode as _om  # lazy import — no cost when live mode succeeds
+
     iv = INTERVAL_MAP[tf]
-    out = {}
-    uni = usdc_universe(quote)
+    out: Dict[str, dict] = {}
+
+    try:
+        uni = usdc_universe(quote)
+    except OSError as _exc:
+        print(f"[offline] MEXC unreachable ({_exc.__class__.__name__}) — GitHub-committed data", flush=True)
+        return _om.current_from_github(tf)
+
     print(f"live scan: {len(uni)} {quote} contracts on {tf}", flush=True)
+
+    _tv_dead = False
+    _offline_cache: Optional[Dict[str, dict]] = None
     for i, u in enumerate(uni, 1):
-        r = tv_rating(u["base"], iv, sleep, u.get("quote", "USDC"))
+        if not _tv_dead:
+            try:
+                r = tv_rating(u["base"], iv, sleep, u.get("quote", "USDC"))
+            except RateLimited as _rl:
+                print(f"[offline] TradingView throttled ({_rl}) — loading GitHub-committed ratings",
+                      flush=True)
+                _tv_dead = True
+                _offline_cache = _om.current_from_github(tf)
+            else:
+                if r["rating"] is None:
+                    print("[offline] TradingView unreachable — loading GitHub-committed ratings",
+                          flush=True)
+                    _tv_dead = True
+                    _offline_cache = _om.current_from_github(tf)
+
+        if _tv_dead:
+            cached = (_offline_cache or {}).get(u["mexc_symbol"], {})
+            r = {
+                "rating":     cached.get("rating"),
+                "tv_source":  "github-cache",
+                "tv_buy":     None,
+                "tv_sell":    None,
+                "tv_neutral": None,
+            }
+
         out[u["mexc_symbol"]] = {
             "rating": r["rating"], "base": u["base"], "quote": u.get("quote"),
             "contractSize": u["contractSize"], "maxLeverage": u["maxLeverage"], "last": u["last"],
