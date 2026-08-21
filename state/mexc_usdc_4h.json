@@ -1,317 +1,317 @@
 {
-  "updated": 1787316445.5090272,
+  "updated": 1787330855.8757627,
   "ratings": {
-    "BTC_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "XRP_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "ENA_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "FARTCOIN_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "XAU_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "PEPE_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "BNB_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "XAUT_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "HBAR_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "BCH_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "DOT_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "ETH_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "SOL_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "SUI_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "DOGE_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "STRK_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "ADA_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "BOME_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "XLM_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "AVAX_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
     "TIA_USDC": {
       "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "ONDO_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "LTC_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
-    },
-    "ICP_USDC": {
-      "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "HYPE_USDC": {
       "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "LINK_USDC": {
+    "SUI_USDC": {
       "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
+    },
+    "FARTCOIN_USDC": {
+      "rating": "STRONG_BUY",
+      "ts": 1787330855.8757627
+    },
+    "STRK_USDC": {
+      "rating": "STRONG_BUY",
+      "ts": 1787330855.8757627
     },
     "WLD_USDC": {
       "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "NEAR_USDC": {
+    "HBAR_USDC": {
       "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "ARB_USDC": {
+    "VIRTUAL_USDC": {
       "rating": "STRONG_BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "SILVER_USDC": {
+    "ETH_USDC": {
+      "rating": "STRONG_BUY",
+      "ts": 1787330855.8757627
+    },
+    "TAO_USDC": {
+      "rating": "STRONG_BUY",
+      "ts": 1787330855.8757627
+    },
+    "XRP_USDC": {
       "rating": "BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
+    },
+    "ENA_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "XAU_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
     },
     "ZEC_USDC": {
       "rating": "BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "TAO_USDC": {
+    "PEPE_USDC": {
       "rating": "BUY",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "SOXL_USDC": {
-      "rating": "SELL",
-      "ts": 1787316445.5090272
+    "SILVER_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "XLM_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "XAUT_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "BCH_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "LTC_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "BTC_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "SOL_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "DOGE_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "LINK_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "ADA_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "BNB_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "AVAX_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "ONDO_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "BOME_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "NEAR_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "AAVE_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
+    },
+    "OP_USDC": {
+      "rating": "BUY",
+      "ts": 1787330855.8757627
     },
     "H_USDC": {
       "rating": "SELL",
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "SNDKSTOCK_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "PUMPFUN_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "SPCXSTOCK_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "SPX500_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "MUSTOCK_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "AAVE_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "OP_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "PENGU_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "VIRTUAL_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "WIF_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "UNI_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "PENDLE_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "GRAM_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "SHIB_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "CRV_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
+    },
+    "UNI_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "ICP_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "ARB_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "WIF_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "DOT_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
     },
     "FIL_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "TRUMP_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "POL_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "INJ_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "SEI_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "ETHFI_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "ORDI_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "1000BONK_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "ETC_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "APT_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "SPX_USDC": {
+    "SHIB_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "WLFI_USDC": {
+    "PENGU_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
+    },
+    "INJ_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "PENDLE_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "TRUMP_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
     },
     "PNUT_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "BIO_USDC": {
+    "POL_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "TRX_USDC": {
+    "SEI_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "EIGEN_USDC": {
+    "WLFI_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "MOODENG_USDC": {
+    "SOXL_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
+    },
+    "SPX_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "GRAM_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "1000BONK_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "ETC_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "ORDI_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
     },
     "KAITO_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "AEVO_USDC": {
+    "MOODENG_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "ICNT_USDC": {
+    "BIO_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "PAXG_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
-    "NEO_USDC": {
+    "ETHFI_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "POPCAT_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "MNT_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
-    },
-    "SKHYNIXSTOCK_USDC": {
-      "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "NEIROCTO_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
+    },
+    "TRX_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "SKHYNIXSTOCK_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "NEO_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "AEVO_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "EIGEN_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "ICNT_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
+    },
+    "POPCAT_USDC": {
+      "rating": null,
+      "ts": 1787330855.8757627
     },
     "RESOLV_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "NOT_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     },
     "SAHARA_USDC": {
       "rating": null,
-      "ts": 1787316445.5090272
+      "ts": 1787330855.8757627
     }
   }
 }
