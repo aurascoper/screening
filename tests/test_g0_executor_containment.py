@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import plistlib
 import socket
 import urllib.request
 from pathlib import Path
@@ -108,3 +109,18 @@ def test_execute_strong_buys_preview_runs_offline_without_external_executor(
     )
     rc = execute_strong_buys.main(["--csv", str(sample_csv), "--leverage", "50"])
     assert rc == 0
+
+
+def test_launchd_plist_explicitly_disabled_and_never_passes_live() -> None:
+    plist_path = REPO_ROOT / "launchd" / "com.aurascoper.strongbuys-retry.plist"
+    assert plist_path.is_file()
+    raw = plist_path.read_bytes()
+    text = raw.decode("utf-8")
+    assert "\u2014" not in text and "\u2013" not in text
+    parsed = plistlib.loads(raw)
+    assert parsed.get("Label") == "com.aurascoper.strongbuys-retry"
+    assert parsed.get("Disabled") is True
+    assert parsed.get("RunAtLoad") is False
+    prog_args = parsed.get("ProgramArguments", [])
+    assert "--live" not in prog_args
+

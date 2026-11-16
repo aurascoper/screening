@@ -2,9 +2,9 @@ name: G0 Containment CI
 
 on:
   push:
-    branches: [main, fix/g0-contain-mexc-executors]
+    branches: [main, fix/g0-contain-mexc-executors, fix/g0-close-plist-and-quarantine]
   pull_request:
-    branches: [main, fix/g0-contain-mexc-executors]
+    branches: [main, fix/g0-contain-mexc-executors, fix/g0-close-plist-and-quarantine]
 
 jobs:
   g0-containment:

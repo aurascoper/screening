@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  STRONG_BUY retry LaunchAgent template - DISABLED under Issue #18 G0 containment.
+  1. Disabled=true prevents automatic bootstrap across macOS reboots unless explicitly overridden.
+  2. ProgramArguments omits the live flag (preview-only); strong_buys_cron.py also fails closed (exit 2)
+     whenever the live flag is passed or DISARM is present.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.aurascoper.strongbuys-retry</string>
+    <key>Disabled</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/aurascoper/Developer/screening/venv/bin/python3</string>
+        <string>/Users/aurascoper/Developer/screening/strong_buys_cron.py</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/aurascoper/Developer/screening</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>8</integer><key>Minute</key><integer>35</integer></dict>
+        <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>8</integer><key>Minute</key><integer>35</integer></dict>
+        <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>8</integer><key>Minute</key><integer>35</integer></dict>
+        <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>8</integer><key>Minute</key><integer>35</integer></dict>
+        <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>8</integer><key>Minute</key><integer>35</integer></dict>
+    </array>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>StandardOutPath</key>
+    <string>/Users/aurascoper/Developer/screening/logs/strongbuys_retry.launchd.out</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/aurascoper/Developer/screening/logs/strongbuys_retry.launchd.err</string>
+</dict>
+</plist>
