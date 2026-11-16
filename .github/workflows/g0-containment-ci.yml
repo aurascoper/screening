@@ -1,0 +1,31 @@
+name: G0 Containment CI
+
+on:
+  push:
+    branches: [main, fix/g0-contain-mexc-executors]
+  pull_request:
+    branches: [main, fix/g0-contain-mexc-executors]
+
+jobs:
+  g0-containment:
+    runs-on: ubuntu-latest
+    env: {}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - run: python -m pip install --upgrade pip
+      - run: pip install pytest ruff
+
+      - name: Ruff check contained entrypoints and tests
+        run: ruff check execute_strong_buys.py strong_buys_cron.py tests/test_g0_executor_containment.py
+
+      - name: Run G0 containment tests
+        run: python -m pytest -ra tests/test_g0_executor_containment.py

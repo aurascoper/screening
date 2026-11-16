@@ -1,0 +1,3 @@
+DISARMED_BY_DEFAULT=true
+GOVERNING_ISSUE=aurascoper/obi-execution-engine#18
+REASON=aurascoper/screening is candidate discovery only; MEXC live execution and external executors are hard-disabled under G0 containment.
