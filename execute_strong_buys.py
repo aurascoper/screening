@@ -1,47 +1,60 @@
 #!/usr/bin/env python3
-"""Bridge: screener BUY/STRONG_BUY rows -> sized MEXC USDC-perp market orders.
+"""Keyless preview sizing helper for screener BUY/STRONG_BUY rows.
 
-Default = keyless PREVIEW: sizes each pick from live public price + contractSize
-and prints the exact /order/submit payload that WOULD be sent. Nothing leaves
-your machine. With --live AND MEXC_API_KEY/MEXC_API_SECRET set, it sets leverage
-then submits each order via the mexc_futures executor.
-
-  python3 execute_strong_buys.py --csv tv_scan_mexc_usdc_1d.csv            # WLD preview
-  python3 execute_strong_buys.py --csv tv_scan_mexc_usdc_1d.csv --ratings STRONG_BUY BUY
-  python3 execute_strong_buys.py --csv ... --leverage 100 --live           # submit (needs keys)
+G0 Containment Notice (Issue #18):
+- aurascoper/screening is strictly candidate discovery; alerts are hypotheses, never trade authorization.
+- All imports of unversioned external ~/Developer/mexc_futures (mexc_market_order) have been removed.
+- Passing --live fails closed immediately with exit code 2 before reading credentials or contacting MEXC.
 """
+
 from __future__ import annotations
 
 import argparse
+import csv
 import json
-import os
-import sys
+import math
 import urllib.request
-
-import pandas as pd
+from collections.abc import Sequence
+from pathlib import Path
 
 MEXC = "https://contract.mexc.com/api/v1/contract"
+_SIDE_OPEN = {"LONG": 1, "SHORT": 3}
+_ORDER_TYPE_MARKET = 5
+MAX_PREVIEW_LEVERAGE = 10
 
 
-def _load_executor():
-    """Import the mexc_futures executor lazily, so this file is importable even
-    where that package isn't on disk (e.g. a cloud checkout that only screens +
-    reports and never goes --live). Override the location with MEXC_FUTURES_DIR.
-    """
-    sys.path.insert(0, os.environ.get("MEXC_FUTURES_DIR", os.path.expanduser("~/Developer/mexc_futures")))
-    from mexc_market_order import (  # noqa: E402
-        MexcContractClient, calculate_order_quantity,
-        _SIDE_OPEN, _POSITION_TYPE, _ORDER_TYPE_MARKET,
-    )
-    return MexcContractClient, calculate_order_quantity, _SIDE_OPEN, _POSITION_TYPE, _ORDER_TYPE_MARKET
+class G0ContainmentError(PermissionError):
+    """Raised when live execution or external executor loading is attempted in screening."""
+
+
+def calculate_order_quantity(
+    margin_usdc: float,
+    leverage: int,
+    price: float,
+    contract_size: float,
+    min_vol: float,
+    vol_unit: float = 1.0,
+    fee_buffer: float = 0.001,
+) -> int:
+    """Pure local contract sizing math for preview calculations (zero external imports)."""
+    if margin_usdc <= 0 or leverage <= 0 or price <= 0 or contract_size <= 0 or vol_unit <= 0:
+        raise ValueError("margin, leverage, price, contract_size, and vol_unit must be positive")
+    notional = margin_usdc * float(leverage) * (1.0 - fee_buffer)
+    raw_contracts = (notional / price) / contract_size
+    stepped = math.floor(raw_contracts / vol_unit) * vol_unit
+    vol = round(stepped)
+    if vol < min_vol:
+        raise ValueError(f"sized volume {vol} below minVol {min_vol}")
+    return vol
 
 
 def _public(path: str) -> dict:
-    req = urllib.request.Request(MEXC + path, headers={"User-Agent": "exec/preview"})
-    return json.loads(urllib.request.urlopen(req, timeout=15).read())
+    req = urllib.request.Request(MEXC + path, headers={"User-Agent": "screening-preview/1.0"})
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        return json.loads(resp.read())
 
 
-def spec(symbol: str):
+def spec(symbol: str) -> tuple[float, float, float, float, int]:
     d = _public(f"/detail?symbol={symbol}").get("data", {})
     t = _public(f"/ticker?symbol={symbol}").get("data", {})
     return (
@@ -53,63 +66,67 @@ def spec(symbol: str):
     )
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description="Execute screener BUY/STRONG_BUY as MEXC USDC orders.")
-    ap.add_argument("--csv", default="tv_scan_mexc_usdc_1d.csv", help="Screener output to read.")
-    ap.add_argument("--ratings", nargs="*", default=["STRONG_BUY"], help="Ratings to act on.")
-    ap.add_argument("--margin", type=float, default=24.75, help="Isolated margin per position (USDC).")
-    ap.add_argument("--leverage", type=int, default=50, help="Target leverage (capped at maxLeverage).")
+def main(argv: Sequence[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description="Keyless preview of screener rows (live execution disabled).")
+    ap.add_argument("--csv", default="tv_scan_mexc_usdc_1d.csv", help="Screener CSV to inspect.")
+    ap.add_argument("--ratings", nargs="*", default=["STRONG_BUY"], help="Ratings to preview.")
+    ap.add_argument("--margin", type=float, default=24.75, help="Hypothetical isolated margin (USDC).")
+    ap.add_argument("--leverage", type=int, default=10, help="Hypothetical leverage (capped at 10x).")
     ap.add_argument("--side", default="LONG", choices=["LONG", "SHORT"])
-    ap.add_argument("--live", action="store_true", help="Actually set leverage + submit (needs keys).")
-    args = ap.parse_args()
-    (MexcContractClient, calculate_order_quantity,
-     _SIDE_OPEN, _POSITION_TYPE, _ORDER_TYPE_MARKET) = _load_executor()
+    ap.add_argument("--live", action="store_true", help="DISABLED under Issue #18 G0 containment.")
+    args = ap.parse_args(list(argv) if argv is not None else None)
 
-    df = pd.read_csv(args.csv)
-    picks = df[df["rating"].isin(args.ratings)].copy()
-    if picks.empty:
-        print(f"No rows rated {args.ratings} in {args.csv}.")
+    if args.live:
+        print(
+            "[G0-BLOCKED] --live execution in aurascoper/screening is permanently disabled "
+            "(Issue #18: candidate discovery only; external mexc_futures executor quarantined)."
+        )
+        return 2
+
+    csv_path = Path(args.csv)
+    if not csv_path.exists():
+        print(f"CSV not found: {csv_path}")
+        return 1
+
+    with csv_path.open("r", encoding="utf-8", newline="") as fh:
+        rows = list(csv.DictReader(fh))
+
+    target_ratings = set(args.ratings or [])
+    picks = [r for r in rows if r.get("rating") in target_ratings]
+    if not picks:
+        print(f"No rows rated {sorted(target_ratings)} in {args.csv}.")
         return 0
 
-    api_key = os.environ.get("MEXC_API_KEY")
-    # accept either secret name; live_trading/.env uses MEXC_SECRET_KEY
-    api_secret = os.environ.get("MEXC_API_SECRET") or os.environ.get("MEXC_SECRET_KEY")
-    client = None
-    if args.live:
-        if not (api_key and api_secret):
-            print("[abort] --live requires MEXC_API_KEY and MEXC_API_SECRET (or MEXC_SECRET_KEY).")
-            return 2
-        client = MexcContractClient(api_key, api_secret)
+    capped_req_lev = min(max(1, args.leverage), MAX_PREVIEW_LEVERAGE)
+    print(
+        f"PREVIEW ONLY: {len(picks)} pick(s) from {args.csv} rated {sorted(target_ratings)} "
+        f"| margin ${args.margin} | up to {capped_req_lev}x | {args.side}\n"
+    )
 
-    print(f"{'LIVE' if args.live else 'PREVIEW'}: {len(picks)} pick(s) from {args.csv} "
-          f"rated {args.ratings} | margin ${args.margin} | up to {args.leverage}x | {args.side}\n")
-
-    for _, r in picks.iterrows():
-        sym = r["mexc_symbol"]
-        base = r.get("base", sym.replace("_USDC", ""))
+    for r in picks:
+        sym = str(r["mexc_symbol"])
+        base = str(r.get("base") or sym.replace("_USDC", ""))
         price, csize, minv, vunit, maxlev = spec(sym)
-        lev = min(args.leverage, maxlev)
+        lev = min(capped_req_lev, maxlev)
         try:
             vol = calculate_order_quantity(args.margin, lev, price, csize, minv, vunit)
-        except ValueError as e:
-            print(f"[skip] {sym}: {e}")
+        except ValueError as exc:
+            print(f"[skip] {sym}: {exc}")
             continue
-        order = {
-            "symbol": sym, "vol": vol, "side": _SIDE_OPEN[args.side],
-            "type": _ORDER_TYPE_MARKET, "openType": 1, "leverage": lev,
+        hypothetical = {
+            "symbol": sym,
+            "vol": vol,
+            "side": _SIDE_OPEN[args.side],
+            "type": _ORDER_TYPE_MARKET,
+            "openType": 1,
+            "leverage": lev,
         }
         notional = vol * csize * price
         print(f"{sym}  rating={r['rating']}  price={price}  lev={lev}x")
-        print(f"  vol={vol} contracts  (~{vol * csize:g} {base}, ~${notional:,.0f} notional on ${args.margin} margin)")
-        print(f"  payload: {json.dumps(order)}")
-        if args.live:
-            pt = _POSITION_TYPE[args.side]
-            print(f"  [leverage] {json.dumps(client.set_leverage(sym, lev, 1, pt))}")
-            print(f"  [order]    {json.dumps(client.submit_order(order))}")
-        print()
+        print(f"  vol={vol} contracts (~{vol * csize:g} {base}, ~${notional:,.0f} notional)")
+        print(f"  hypothetical_preview: {json.dumps(hypothetical)}\n")
 
-    if not args.live:
-        print("PREVIEW only — no order was sent. Re-run with --live (and MEXC_API_KEY/SECRET) to submit.")
+    print("PREVIEW only - live execution and external mexc_futures imports are disabled under G0.")
     return 0
 
 
