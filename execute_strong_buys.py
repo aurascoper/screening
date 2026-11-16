@@ -13,9 +13,9 @@ import argparse
 import csv
 import json
 import math
-from pathlib import Path
-from typing import Sequence
 import urllib.request
+from collections.abc import Sequence
+from pathlib import Path
 
 MEXC = "https://contract.mexc.com/api/v1/contract"
 _SIDE_OPEN = {"LONG": 1, "SHORT": 3}
@@ -42,7 +42,7 @@ def calculate_order_quantity(
     notional = margin_usdc * float(leverage) * (1.0 - fee_buffer)
     raw_contracts = (notional / price) / contract_size
     stepped = math.floor(raw_contracts / vol_unit) * vol_unit
-    vol = int(round(stepped))
+    vol = round(stepped)
     if vol < min_vol:
         raise ValueError(f"sized volume {vol} below minVol {min_vol}")
     return vol

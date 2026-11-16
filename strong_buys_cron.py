@@ -14,8 +14,8 @@ import argparse
 import csv
 import datetime
 import os
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
 
 HERE = Path(__file__).resolve().parent
 DISARM = HERE / "DISARM"
@@ -25,7 +25,7 @@ LOG_DIR = HERE / "logs"
 
 def log(msg: str, *, log_dir: Path = LOG_DIR) -> None:
     log_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+    ts = datetime.datetime.now(datetime.UTC).isoformat(timespec="seconds")
     line = f"[{ts}] {msg}"
     print(line)
     with (log_dir / "strong_buys_cron.log").open("a", encoding="utf-8") as fh:

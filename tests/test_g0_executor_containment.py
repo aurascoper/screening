@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 import ast
-from pathlib import Path
 import socket
 import urllib.request
+from pathlib import Path
 
 import pytest
 
