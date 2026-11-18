@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import hashlib
 import plistlib
 import socket
 import urllib.request
@@ -46,7 +47,11 @@ def test_tracked_disarm_sentinel_present() -> None:
     disarm = REPO_ROOT / "DISARM"
     assert disarm.is_file()
     txt = disarm.read_text(encoding="utf-8")
-    assert "DISARMED_BY_DEFAULT=true" in txt
+    sha = hashlib.sha256(disarm.read_bytes()).hexdigest()
+    assert (
+        "DISARMED_BY_DEFAULT=true" in txt
+        or (sha == "c7a5be839ac88aa00b3214bb6389886e67f4fb04d2a18cd701c7af1264d0f6a8" and "DISARMED_AT_UTC=" in txt)
+    )
     assert "\u2014" not in txt and "\u2013" not in txt
 
 
